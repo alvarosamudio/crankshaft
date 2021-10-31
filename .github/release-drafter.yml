@@ -1,0 +1,11 @@
+template: |
+  ## Hardware configurations
+
+  ## Fixes
+  $CHANGES
+
+  ## Enhancements
+  - None
+
+  ## AASDK/OpenAuto
+  - None
