@@ -31,7 +31,7 @@ jobs:
           buildbranch='crankshaft-ng'
           buildhash=$(git rev-parse --short "$GITHUB_SHA")
           buildname="${builddate}-${buildbranch}-${buildhash}"
-          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=version::${version}
           echo ::set-output name=buildhash::${buildhash}
           echo ::set-output name=buildbranch::${buildbranch}
           echo ::set-output name=builddate::${builddate}
@@ -57,6 +57,13 @@ jobs:
               osname: "buster",
               ostype: "Debian"
             }
+          - {
+              name: "Debian Buster arm7",
+              basefile: "updater/base_buster_arm7",
+              arch: "arm7",
+              osname: "buster",
+              ostype: "Debian"
+            }
     name: 'Build:  ${{ matrix.config.name }}'
     steps:
       - 
@@ -78,7 +85,7 @@ jobs:
           osname: ${{ matrix.config.osname }}
       - 
         name: Create Base Image
-        uses: Nature40/pimod@v0.4.4
+        uses: Nature40/pimod@v0.5.0
         with:
           pifile: ${{ matrix.config.basefile }}.Pifile
       - 
@@ -123,7 +130,7 @@ jobs:
       - 
         name: Build Changelog
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v2.6.0
+        uses: mikepenz/release-changelog-builder-action@v2.8.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - 
@@ -135,7 +142,7 @@ jobs:
         with:
           tag_name: ${{needs.version.outputs.version }}
           release_name: ${{needs.version.outputs.buildname }}
-          body: ${{steps.github_release.outputs.changelog}}
+          #body: ${{steps.github_release.outputs.changelog}}
           draft: true
           prerelease: true
 # Upload release artifacts
@@ -155,6 +162,13 @@ jobs:
               name: "Debian Buster armhf",
               basefile: "base_buster_armhf",
               arch: "armhf",
+              osname: "buster",
+              ostype: "Debian"
+            }
+          - {
+              name: "Debian Buster arm7",
+              basefile: "updater/base_buster_arm7",
+              arch: "arm7",
               osname: "buster",
               ostype: "Debian"
             }
